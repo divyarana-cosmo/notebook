@@ -6,7 +6,8 @@ import numpy as np
 import healpy as hp
 from scipy.interpolate import interp1d
 
-#Please note that here the positions use theta(angle from z),phi(angle from x).
+# Please note that here the positions use theta(angle from z),phi(angle from x).
+# and all are in radians
 
 # For info related to healpix in general please look at this
 # https://arxiv.org/abs/astro-ph/0409513
