@@ -24,18 +24,18 @@ def gauss(x,sig):
 NSIDE = 32
 print("Approximate resolution at NSIDE {} is {:.2} deg".format(NSIDE, 180*hp.nside2resol(NSIDE, arcmin=False) / 3.14))
 
-# hp.nside2npix() computes total number of pixels = 12*NSIDE**2 
+# hp.nside2npix() computes total number of pixels = 12*NSIDE**2
 NPIX = hp.nside2npix(NSIDE)
 n = np.arange(0,NPIX,1)
 
-# Here we are loading data 
+# Here we are loading data
 # Data(s.no,D_c,D_l,r.a,dec) - data structure
 # s.no - serial no
 # D_c - comoving distance
 # D_l - luminosity distance
 # r_a - right accertion
 # dec - declination
-data =np.loadtxt('/Users/divyarana/Documents/surhud/data/angular_DM.dat',dtype=float,unpack=True)
+data =np.loadtxt('file path.',dtype=float,unpack=True)
 nmax=len(data[0][:])
 
 # opening new file to write
@@ -47,11 +47,11 @@ for i in range (0,nmax):
 	theta0=np.pi/2 - data[4][i] #declination
 	phi0=data[3][i] #right acertion
 
-	#gaussian parameter sig should be choosen according to the Theta max in the cross angular correlation 
+	#gaussian parameter sig should be choosen according to the Theta max in the cross angular correlation
 	sig=0.5 #(data[2][i]*np.pi)/(np.sqrt(np.pi)*180)  # pi*sig^2/dl^2 = 1 str
 
 	#computing distance and assigning probability
-	# pix2ang : nside,ipix -> theta[rad](0,pi),phi[rad](0,2pi) 
+	# pix2ang : nside,ipix -> theta[rad](0,pi),phi[rad](0,2pi)
 	# hp.rotator.angdist(dir1,dir2) -> Returns the angular distance between dir1 and dir2.
 	dist=hp.rotator.angdist(hp.pix2ang(NSIDE,n),[theta0,phi0])
 	m=gauss(dist,sig)
@@ -72,13 +72,13 @@ for i in range (0,nmax):
 	ynew = np.around(ynew).astype(int)
 	new_pos = hp.pix2ang(NSIDE,ynew[0])
 	print >> lb,'',data[0][i],'\t',data[1][i],'\t',data[2][i],'\t',data[3][i],'\t',data[4][i],'\t',new_pos[1],'\t',np.pi/2 - new_pos[0]
-	
+
 	print'particle number = %d done ' % (i) # This will print the running status of the code
 lb.close()
 
 print 'New position written in new_position.txt'
-
+'''
 m[ynew[0]]=np.max(m)
 hp.mollview(m, title="test")
 plt.show()
-
+'''
