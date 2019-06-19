@@ -35,14 +35,15 @@ n = np.arange(0,NPIX,1)
 # D_l - luminosity distance
 # r_a - right accertion
 # dec - declination
-data =np.loadtxt('file path.',dtype=float,unpack=True)
+data =np.loadtxt('/Users/divyarana/Documents/surhud/data/angular_DM.dat',dtype=float,unpack=True)
 nmax=len(data[0][:])
 
+m=np.zeros(NPIX)
 # opening new file to write
 lb=open('new_positions.txt','w')
 
 # In this part of the code we will produce a new position provided old ones from the data
-for i in range (0,nmax):
+for i in range (0,1):
 	#position of the center of the gaussian
 	theta0=np.pi/2 - data[4][i] #declination
 	phi0=data[3][i] #right acertion
@@ -62,21 +63,32 @@ for i in range (0,nmax):
     		pdf=np.sum(m[0:i1+1])
     		# x= (x1-x0)*int + x0
     		x0[i1]=((pdf)*(1.) + 0) # a is a array consists of (value, error)
+	#	print x0[0]
 
 	f=interp1d(x0,n,kind='linear')
-
+	#print max(x0)
 	#sample of uniform numbers
 	n0=1
 	xnew=np.random.random_sample(n0)
-	ynew=f(xnew)
-	ynew = np.around(ynew).astype(int)
-	new_pos = hp.pix2ang(NSIDE,ynew[0])
+
+	xnew=1.0
+	try:
+	    ynew=f(xnew)
+	except ValueError:
+	    print "Handling exeception"
+	    if xnew<=np.min(x0):
+		    ynew=0
+	    if xnew>=np.max(x0):
+		    ynew=NPIX-1
+	ynew = int(ynew)
+	new_pos = hp.pix2ang(NSIDE,ynew)
 	print >> lb,'',data[0][i],'\t',data[1][i],'\t',data[2][i],'\t',data[3][i],'\t',data[4][i],'\t',new_pos[1],'\t',np.pi/2 - new_pos[0]
 
 	print'particle number = %d done ' % (i) # This will print the running status of the code
 lb.close()
-
-print 'New position written in new_position.txt'
+#plt.plot(n,m,'b')
+#print 'New position written in new_position.txt'
+#plt.show()
 '''
 m[ynew[0]]=np.max(m)
 hp.mollview(m, title="test")
