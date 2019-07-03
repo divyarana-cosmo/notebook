@@ -6,7 +6,6 @@ import numpy as np
 import healpy as hp
 from scipy.interpolate import interp1d
 
-#dghasjdas
 
 # Please note that here the positions use theta(angle from z),phi(angle from x).
 # and all are in radians
